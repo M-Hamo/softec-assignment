@@ -1,4 +1,4 @@
-# Editor configuration, see https://editorconfig.org
+# Editor configuration, see http://editorconfig.org
 root = true
 
 [*]
@@ -9,8 +9,11 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 
 [*.ts]
-quote_type = single
+quote_type = double
 
 [*.md]
 max_line_length = off
 trim_trailing_whitespace = false
+
+[*.{razor,cshtml}]
+charset = utf-8-bom

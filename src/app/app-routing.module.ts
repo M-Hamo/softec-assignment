@@ -33,5 +33,5 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class AppRoutingModule {
-  public static Components = [AppComponent, LayoutComponent];
+  public static Components = [AppComponent];
 }

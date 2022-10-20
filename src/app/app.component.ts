@@ -15,7 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private readonly _iconRegistry: MatIconRegistry
   ) {
     // Change material icons theme
-    this._iconRegistry.setDefaultFontSetClass("material-icons-rounded");
+    this._iconRegistry.setDefaultFontSetClass("material-icons-round");
   }
 
   private readonly _destroyAll$ = new ReplaySubject<unknown>(1);

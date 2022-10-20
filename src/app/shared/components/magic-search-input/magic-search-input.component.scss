@@ -1,0 +1,12 @@
+.magic-input-container {
+  @apply py-[2px] px-[5px] rounded-full h-full w-auto flex justify-between items-center bg-white
+   shadow-md border border-slate-50;
+
+  input {
+    @apply h-full mx-2  outline-none sm:text-lg text-xs font-medium;
+  }
+
+  .short-cut {
+    @apply sm:visible sm:block hidden invisible py-1 px-3 bg-slate-100 border border-gray-200 rounded-full sm:text-sm text-xs font-semibold;
+  }
+}

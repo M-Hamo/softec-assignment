@@ -1,0 +1,13 @@
+<div #searchInput class="magic-input-container" [ngClass]="inputCLass">
+  <input
+    #input
+    [type]="type"
+    [placeholder]="placeholder"
+    [formControl]="formControl"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    (keydown)="change.emit(input?.value)"
+  />
+
+  <div class="short-cut">Shift + {{ char }}</div>
+</div>

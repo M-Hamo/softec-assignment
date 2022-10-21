@@ -18,6 +18,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { BreakpointObserverService } from "@shared/services/breakpoint-observer.service";
 import { Breakpoints } from "@angular/cdk/layout";
 import { ModalPercentageSize } from "@shared/utils/enum/modal-size-enum";
+import { ToastrService } from "ngx-toastr";
 import { EditProductQuantityComponent } from "../../ui/edit-product-quantity/edit-product-quantity.component";
 import { ConfirmationDialogService } from "@shared/components/confirmation-dialog";
 
@@ -34,6 +35,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     private readonly _dialog: MatDialog,
     private readonly _confirmService: ConfirmationDialogService,
     private readonly _breakpointObserver: BreakpointObserverService,
+    private readonly _toasterService: ToastrService,
     private readonly _productsService: ProductsService
   ) {}
 
@@ -62,10 +64,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   public onSelectProduct = (product: IProduct): void => {
-    this._productsService.updateProduct({
-      ...product,
-      selected: !product?.selected,
-    });
+    if (product?.AvailablePieces > 5) {
+      this._productsService.updateProduct({
+        ...product,
+        selected: !product?.selected,
+      });
+    } else
+      this._toasterService.error(
+        "This product has very few quantity, Yous should update it and try to select again."
+      );
   };
 
   // Edit Product quantity
@@ -98,7 +105,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
             )
             .pipe(
               tap((res: boolean) => {
-                if (res) this._productsService.updateProduct(newProd);
+                if (res) {
+                  this._productsService.updateProduct(newProd);
+                  this._toasterService.success("Product updated successfully.");
+                }
               })
             )
         )

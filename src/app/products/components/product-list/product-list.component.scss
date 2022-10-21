@@ -1,4 +1,8 @@
 .product-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: stretch;
   min-height: 100vh;
   width: 70%;
   gap: 10px;

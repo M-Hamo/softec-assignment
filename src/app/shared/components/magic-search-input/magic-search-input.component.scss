@@ -3,7 +3,7 @@
    shadow-md border border-slate-50;
 
   input {
-    @apply h-full mx-2  outline-none sm:text-lg text-xs font-medium;
+    @apply h-full flex-grow mx-2  outline-none sm:text-lg text-xs font-medium;
   }
 
   .short-cut {

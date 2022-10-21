@@ -1,0 +1,35 @@
+.product-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 3px;
+  padding: 0;
+  overflow: hidden;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .product-name,
+  .product-price {
+    text-align: center;
+    font-size: large;
+    font-weight: 500;
+  }
+
+  .edit-btn {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+  }
+}
+
+.few-quantities {
+  border: 2px solid red;
+}
+
+.selected-product {
+  border: 2px solid rgb(23, 165, 23);
+}

@@ -8,7 +8,6 @@ import {
   ElementRef,
 } from "@angular/core";
 
-import { BidirectionallyService } from "src/app/core/services/bidirectionally.service";
 import {
   ButtonColors,
   ButtonTypes,
@@ -23,9 +22,6 @@ import { SharedModule } from "./../../shared.module";
   styleUrls: ["./dialog-ui.component.scss"],
 })
 export class DialogComponent {
-  public constructor(
-    private readonly bidirectionally: BidirectionallyService
-  ) {}
   @ContentChild("headerContent") public headerContent?: ElementRef<null>;
 
   @ContentChild("footerContent") public footerContent?: ElementRef<null>;
@@ -63,8 +59,6 @@ export class DialogComponent {
   @Output() public readonly cancelDialog = new EventEmitter();
 
   @Output() public readonly deletePage = new EventEmitter();
-
-  public direction$ = this.bidirectionally.direction$;
 
   public buttonTypes = ButtonTypes;
 

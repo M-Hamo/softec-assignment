@@ -1,7 +1,4 @@
-<div
-  [dir]="direction$ | async"
-  class="max-w-md sm:max-w-full m-auto flex flex-col w-full h-full"
->
+<div class="max-w-md sm:max-w-full m-auto flex flex-col w-full h-full">
   <ng-container *ngIf="!!headerContent; else defaultHeaderContent">
     <ng-container *ngTemplateOutlet="headerContent"></ng-container>
   </ng-container>

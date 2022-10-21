@@ -1,8 +1,5 @@
-import { Direction } from "@angular/cdk/bidi";
 import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Observable } from "rxjs";
-import { BidirectionallyService } from "src/app/core/services/bidirectionally.service";
 import {
   ButtonTypes,
   ButtonColors,
@@ -15,7 +12,6 @@ import {
 })
 export class ConfirmationDialogComponent {
   public constructor(
-    private readonly _bidirectionally: BidirectionallyService,
     public readonly dialogRef: MatDialogRef<ConfirmationDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -25,9 +21,6 @@ export class ConfirmationDialogComponent {
       close: string;
     }
   ) {}
-
-  public readonly direction$: Observable<Direction> =
-    this._bidirectionally.direction$;
 
   public readonly ButtonTypes = ButtonTypes;
   public readonly ButtonColors = ButtonColors;

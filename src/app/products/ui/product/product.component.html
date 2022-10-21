@@ -1,0 +1,22 @@
+<mat-card
+  class="product-container"
+  [ngClass]="{
+    'few-quantities': product?.AvailablePieces <= 5,
+    'selected-product': productSelected
+  }"
+>
+  <app-button
+    *ngIf="product?.AvailablePieces <= 5"
+    class="edit-btn"
+    [matType]="ButtonTypes.icon"
+    icon="edit"
+    (click)="onEditProduct.emit(product); $event.stopPropagation()"
+  >
+  </app-button>
+
+  <img [src]="product?.ProductImg" [alt]="product?.ProductName" />
+
+  <div class="product-name">{{ product?.ProductName }}</div>
+
+  <div class="product-price">{{ product?.ProductPrice | currency }}</div>
+</mat-card>

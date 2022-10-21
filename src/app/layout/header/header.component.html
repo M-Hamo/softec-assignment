@@ -1,0 +1,35 @@
+<mat-toolbar class="flex-center">
+  <nav class="navbar flex-between">
+    <h2 class="logo" routerLink="/">Shop App</h2>
+
+    <app-button
+      class="menu-btn"
+      [matType]="ButtonTypes.icon"
+      [icon]="showMenuList ? 'close' : 'menu'"
+      (clicked)="onToggleMeneList()"
+    >
+    </app-button>
+
+    <section class="navigation-large flex-center">
+      <ul class="navigation-list flex-center">
+        <li class="flex-center">
+          <a class="flex-center">Products</a>
+        </li>
+        <li class="flex-center">
+          <a class="flex-center">Orders</a>
+        </li>
+      </ul>
+    </section>
+  </nav>
+
+  <section *ngIf="showMenuList" class="navigation-small">
+    <ul class="navigation-list flex-col-stretch">
+      <li class="flex-content-start">
+        <a class="flex-content-start">Products</a>
+      </li>
+      <li class="flex-content-start">
+        <a class="flex-content-start">Orders</a>
+      </li>
+    </ul>
+  </section>
+</mat-toolbar>

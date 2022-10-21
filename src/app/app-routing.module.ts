@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
-import { LayoutComponent } from "./layout/layout/layout.component";
+import { LayoutContainerComponent } from "./layout/container/container.component";
 import { NotFoundComponent } from "./pages/not-found.component";
 
 const routes: Routes = [
@@ -12,7 +12,7 @@ const routes: Routes = [
   },
   {
     path: "shop",
-    component: LayoutComponent,
+    component: LayoutContainerComponent,
     children: [
       {
         path: "",

@@ -1,0 +1,67 @@
+<section class="orders-container">
+  <div class="w-full flex justify-start items-center">
+    <magic-search-input
+      class="lg:w-1/2 w-full sm:h-11 h-8"
+      [formControl]="searchInput"
+      type="number"
+      outlineOption="2.5px solid #d3d3d3"
+      placeholder="Search by order id..."
+    ></magic-search-input>
+  </div>
+
+  <app-table
+    class="table-scrollable"
+    [data]="ordersList$ | async"
+    [dataLoaded]="ordersLoaded"
+    [extendable]="true"
+    [colSpanCount]="5"
+  >
+    <ng-template #headers>
+      <th>Order_Id</th>
+      <th>Total Price</th>
+      <th>Payment Type</th>
+      <th>Order Date</th>
+      <th>Actions</th>
+    </ng-template>
+
+    <ng-template #rows let-row let-index="index">
+      <td>{{ row.OrderId }}</td>
+      <td>{{ row.TotalPrice | currency }}</td>
+      <td>{{ row.PaymentType }}</td>
+      <td *ngIf="row.OrderDate">
+        {{ row.OrderDate | date: "dd-MM-YYYY h:mm a" }}
+      </td>
+
+      <td (click)="$event.stopPropagation()">
+        <div class="action-btns">
+          <app-button
+            [routerLink]="['/shop/orders', row.OrderId]"
+            btnClass="bg-gray-600 text-white"
+            [matType]="ButtonTypes.miniFap"
+            icon="airplay"
+            toolTip="Details"
+          >
+          </app-button>
+        </div>
+      </td>
+    </ng-template>
+
+    <ng-template #noData>
+      <no-data
+        [text]="
+          searchInput.value
+            ? 'No orders matches this Id !!'
+            : 'There is no orders to show !!'
+        "
+      >
+      </no-data>
+    </ng-template>
+
+    <!-- <ng-template #extendableArea let-row>
+          <div class="min-h-min flex justify-center items-center bg-slate-50">
+            {{ index }}
+            {{ row | json }}
+          </div>
+        </ng-template> -->
+  </app-table>
+</section>

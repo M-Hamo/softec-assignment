@@ -1,4 +1,4 @@
-.product-container {
+.orders-container {
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -9,10 +9,25 @@
   padding: 0;
   padding: 2.25rem 0;
   margin: 0 auto;
+
+  app-table {
+    th,
+    td {
+      font-size: 16px;
+      line-height: 1rem;
+      text-align: start;
+    }
+
+    .action-btns {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
 }
 
 @media (max-width: 768px) {
-  .product-container {
+  .orders-container {
     padding: 1rem;
     gap: 8px;
     width: 100%;

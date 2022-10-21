@@ -7,7 +7,6 @@ import {
   HostListener,
   Input,
   OnDestroy,
-  OnInit,
   Output,
   ViewChild,
 } from "@angular/core";

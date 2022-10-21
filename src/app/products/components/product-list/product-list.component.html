@@ -1,0 +1,47 @@
+<section class="product-container">
+  <div class="w-full flex justify-start items-center">
+    <magic-search-input
+      class="md:w-8/12 w-full sm:h-11 h-8"
+      [formControl]="searchInput"
+      outlineOption="2.5px solid #d3d3d3"
+      placeholder="Search..."
+    ></magic-search-input>
+  </div>
+
+  <div
+    class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 content-start gap-4"
+  >
+    <ng-container *ngIf="selectedProducts$ | async as selectedProducts">
+      <mat-chip-list
+        *ngIf="selectedProducts.length"
+        class="lg:col-span-4 mdcol-span-3 sm:col-span-2 col-span-1 bg-slate-100 rounded p-2"
+      >
+        <mat-chip
+          *ngFor="let prod of selectedProducts"
+          (removed)="onSelectProduct(prod)"
+        >
+          {{ prod?.ProductName }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-list>
+    </ng-container>
+
+    <ng-container *ngIf="products$ | async as products; else loader">
+      <app-product
+        *ngFor="let prod of products"
+        [product]="prod"
+        [productSelected]="prod?.selected"
+        (onEditProduct)="onEditProductQuantity($event)"
+        (click)="onSelectProduct(prod)"
+      ></app-product>
+    </ng-container>
+  </div>
+</section>
+
+<ng-template #loader>
+  <mat-card class="m-0 p-0" *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]">
+    <shimmer-loading [loadingsCount]="4"></shimmer-loading>
+  </mat-card>
+</ng-template>

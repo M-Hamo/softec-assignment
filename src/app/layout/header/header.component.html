@@ -12,10 +12,18 @@
 
     <section class="navigation-large flex-center">
       <ul class="navigation-list flex-center">
-        <li class="flex-center">
+        <li
+          class="flex-center"
+          routerLink="/shop/products/list"
+          routerLinkActive="active-route"
+        >
           <a class="flex-center">Products</a>
         </li>
-        <li class="flex-center">
+        <li
+          class="flex-center"
+          routerLink="/shop/orders/list"
+          routerLinkActive="active-route"
+        >
           <a class="flex-center">Orders</a>
         </li>
       </ul>
@@ -24,10 +32,20 @@
 
   <section *ngIf="showMenuList" class="navigation-small">
     <ul class="navigation-list flex-col-stretch">
-      <li class="flex-content-start">
+      <li
+        class="flex-content-start"
+        routerLink="/shop/products/list"
+        routerLinkActive="active-route"
+        (click)="onToggleMeneList()"
+      >
         <a class="flex-content-start">Products</a>
       </li>
-      <li class="flex-content-start">
+      <li
+        class="flex-content-start"
+        routerLink="/shop/orders/list"
+        routerLinkActive="active-route"
+        (click)="onToggleMeneList()"
+      >
         <a class="flex-content-start">Orders</a>
       </li>
     </ul>

@@ -3,8 +3,4 @@
 @import "scrollbar";
 @import "tailwend";
 @import "material";
-
-:root {
-  --nav-bg: #f8f8f8;
-  --nav-border: #d3d3d3;
-}
+@import "ngx-toastr";

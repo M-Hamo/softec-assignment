@@ -1,0 +1,19 @@
+<app-dialog
+  [isValid]="quantityField?.valid"
+  [isLoading]="submitLoading"
+  submitBtnText="Update"
+  title="Update quantity"
+  titleIcon="shopping_basket"
+  cancelBtnText="cancel"
+  (submitDialog)="onSubmitUpdate()"
+  (closeDialog)="cancelHandler()"
+  (cancelDialog)="cancelHandler()"
+>
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Quantity</mat-label>
+    <input [formControl]="quantityField" matInput type="number" />
+    <mat-error *ngIf="quantityField?.touched && quantityField?.invalid"
+      >This field is required</mat-error
+    >
+  </mat-form-field>
+</app-dialog>

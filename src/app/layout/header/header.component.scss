@@ -5,7 +5,7 @@ mat-toolbar {
   height: auto;
   background-color: var(--nav-bg);
   border-bottom: 1px solid var(--nav-border);
-
+  z-index: 999;
   .navbar {
     min-height: 65px;
     width: 70%;
@@ -25,6 +25,7 @@ mat-toolbar {
 
   .navigation-list {
     list-style: none;
+    gap: 0.6rem;
     a {
       width: 100%;
       font-size: large;
@@ -49,6 +50,17 @@ mat-toolbar {
 
   .navigation-large {
     display: block;
+  }
+
+  .active-route {
+    a {
+      width: 100%;
+      font-size: large;
+      font-weight: 600;
+      padding: 5px 15px;
+      border-radius: 4px;
+      @apply bg-slate-200 text-gray-900 shadow;
+    }
   }
 }
 

@@ -5,6 +5,11 @@
   src: url("../assets/fonts/jzoor/JF-Flat-regular.ttf");
 }
 
+:root {
+  --nav-bg: #f8f8f8;
+  --nav-border: #d3d3d3;
+}
+
 .flex-center {
   display: flex;
   justify-content: center;

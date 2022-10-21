@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { OrdersListComponent } from "./components/orders-list/orders-list.component";
 
 const routes: Routes = [
   {
@@ -7,10 +8,10 @@ const routes: Routes = [
     redirectTo: "list",
     pathMatch: "full",
   },
-  // {
-  //   path: "list",
-  //   component: ProductListComponent,
-  // },
+  {
+    path: "list",
+    component: OrdersListComponent,
+  },
 ];
 
 @NgModule({
@@ -18,5 +19,5 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class OrdersRoutingModule {
-  public static Components = [];
+  public static Components = [OrdersListComponent];
 }

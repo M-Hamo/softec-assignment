@@ -19,14 +19,14 @@ export class ProductsService {
   // Search key store
   public readonly filterProducts = new BehaviorSubject<string | null>(null);
 
-  private readonly _productStore$: Observable<IProduct[]> =
-    this._productsStore.asObservable();
-
   private readonly _filterProducts$: Observable<string | null> =
     this.filterProducts.asObservable();
 
+  public readonly productStore$: Observable<IProduct[]> =
+    this._productsStore.asObservable();
+
   public readonly selectedProducts$: Observable<IProduct[]> =
-    this._productStore$.pipe(
+    this.productStore$.pipe(
       map((prods: IProduct[]) =>
         prods.filter((prod: IProduct) => prod?.selected)
       )
@@ -35,7 +35,7 @@ export class ProductsService {
   // Filter products with search store => filterProducts
   public getFilteredProducts$: Observable<IProduct[]> = combineLatest([
     this._filterProducts$,
-    this._productStore$,
+    this.productStore$,
   ]).pipe(
     map(([filterWard, allProds]) =>
       filterWard === null

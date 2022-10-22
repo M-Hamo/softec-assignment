@@ -1,0 +1,126 @@
+<section
+  *ngIf="orderDetails$ | async as orderDetails; else loader"
+  class="details-container"
+>
+  <mat-card>
+    <h3 class="text-start text-base font-semibold text-gray-700 mb-4">
+      Customer Details
+    </h3>
+    <h3 class="mb-1 text-center text-xl font-bold text-gray-800">
+      {{ orderDetails?.User?.Name }}
+    </h3>
+
+    <div class="w-auto flex-center">
+      <div
+        class="w-auto flex-center rounded-full py-[.5rem] px-4 bg-blue-600 text-white font-semibold"
+      >
+        <mat-icon class="mr-3">account_balance_wallet</mat-icon>
+        Total Price :
+        {{ orderDetails?.TotalPrice | number: "1.2" }}
+      </div>
+    </div>
+
+    <div class="h-[2px] bg-slate-50 my-3"></div>
+
+    <order-detail
+      [detail]="{
+        value: orderDetails?.User?.Email,
+        icon: 'email',
+        label: 'Email'
+      }"
+    ></order-detail>
+
+    <order-detail
+      [detail]="{
+        value: orderDetails?.User?.Phone,
+        icon: 'phone_iphone',
+        label: 'Phone number'
+      }"
+    ></order-detail>
+
+    <order-detail
+      [detail]="{
+        value: orderDetails?.User?.Address,
+        icon: 'place',
+        label: 'Address'
+      }"
+    ></order-detail>
+
+    <order-detail
+      [detail]="{
+        value: orderDetails?.User?.RegisterDate | date: 'dd-MM-YYYY h:mm a',
+        icon: 'event',
+        label: 'Register Date'
+      }"
+    ></order-detail>
+  </mat-card>
+
+  <mat-card *ngIf="orderDetails?.Products.length">
+    <h3 class="text-start text-base font-semibold text-gray-700 mb-4">
+      Products Details
+    </h3>
+
+    <div
+      *ngFor="let prod of orderDetails?.Products"
+      class="order-product-details flex-between border-gray-500"
+    >
+      <div class="flex-between gap-2">
+        <img [src]="prod?.ProductImg" [alt]="prod?.ProductName" />
+
+        <h4 class="text-start text-sm font-semibold text-gray-700">
+          {{ prod?.ProductName }}
+        </h4>
+      </div>
+
+      <div class="flex-center pr-4">
+        {{ prod?.ProductPrice | currency }}
+        x
+        {{ prod?.Quantity }}
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card>
+    <h3 class="text-start text-base font-semibold text-gray-700 mb-4">
+      Order Details
+    </h3>
+
+    <order-detail
+      [detail]="{
+        value: orderDetails?.OrderId,
+        icon: 'copyright',
+        label: 'Order_Id'
+      }"
+    ></order-detail>
+
+    <order-detail
+      [detail]="{
+        value: orderDetails?.Products.length,
+        icon: 'shopping_basket',
+        label: 'Products count'
+      }"
+    ></order-detail>
+
+    <order-detail
+      [detail]="{
+        value: orderDetails?.PaymentType,
+        icon: 'account_balance_wallet',
+        label: 'Payment Type'
+      }"
+    ></order-detail>
+
+    <order-detail
+      [detail]="{
+        value: orderDetails?.OrderDate | date: 'dd-MM-YYYY h:mm a',
+        icon: 'event',
+        label: 'Order Date'
+      }"
+    ></order-detail>
+  </mat-card>
+</section>
+
+<ng-template #loader>
+  <section class="loader">
+    <shimmer-loading></shimmer-loading>
+  </section>
+</ng-template>

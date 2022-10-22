@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
-import { map, take, tap } from "rxjs/operators";
+import { concatMap, filter, map, take, tap } from "rxjs/operators";
 import { ProductsService } from "src/app/products/services/products.service";
 import { IOrderProduct, IOrderVm } from "../utils/models/order.interface";
+import { IUserVm } from "../utils/models/user.interface";
 import { IProduct } from "./../../products/utils/models/product.interface";
 
 @Injectable({
@@ -31,10 +32,22 @@ export class OrdersService {
     this._ordersStore.asObservable();
 
   // Get the specific order by order id
-  public getOrderById = (orderId: number): Observable<IOrderVm | undefined> => {
+  public getOrderById = (orderId: number): Observable<IOrderVm> => {
     return this.ordersStore$.pipe(
-      map((orders: IOrderVm[]) =>
-        orders.find((o: IOrderVm) => o?.OrderId === orderId)
+      map(
+        (orders: IOrderVm[]) =>
+          orders.find((o: IOrderVm) => o?.OrderId === orderId) ??
+          ({} as IOrderVm)
+      ),
+      filter((order: IOrderVm) => !!order?.OrderId),
+      // Getting user by order UserId
+      concatMap((order: IOrderVm) =>
+        this._getUsers$.pipe(
+          map((users: IUserVm[]) => ({
+            ...order,
+            User: users.find((user: IUserVm) => user?.Id === order?.UserId),
+          }))
+        )
       )
     );
   };
@@ -66,19 +79,22 @@ export class OrdersService {
       .subscribe();
   };
 
-  // This func just find products for each order and calculate total price for it
+  // This func just parse products for each order and calculate total price for it
   // Then store the final results in order store to render in the list
   private _mergeProductsToOrders = (
     orders: IOrderVm[],
     products: IProduct[]
   ): void => {
     const newList: IOrderVm[] = orders.map((order: IOrderVm) => {
-      const prods: IProduct[] = products.filter((prod: IProduct) =>
-        order?.Products?.some(
-          (o: IOrderProduct | IProduct) =>
-            (o as IOrderProduct)?.ProductId === prod?.ProductId
-        )
-      );
+      const prods: (IProduct & IOrderProduct)[] = [];
+
+      order?.Products.forEach((o: IOrderProduct | IProduct) => {
+        products.forEach((p: IProduct) => {
+          if (o?.ProductId === p?.ProductId) {
+            prods.push({ ...o, ...p } as IProduct & IOrderProduct);
+          }
+        });
+      });
 
       return {
         ...order,
@@ -104,7 +120,7 @@ export class OrdersService {
   );
 
   // Get all Users
-  private _getUsers$: Observable<unknown> = this._http.get<unknown>(
+  private _getUsers$: Observable<IUserVm[]> = this._http.get<IUserVm[]>(
     "assets/data-source/users.json"
   );
 }

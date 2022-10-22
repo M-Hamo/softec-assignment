@@ -1,0 +1,11 @@
+<div *ngIf="!!detail; else loader" class="detail flex-between">
+  <span class="title flex-between text-gray-400"
+    ><mat-icon>{{ detail?.icon }}</mat-icon>
+    <span> {{ detail?.label }}</span></span
+  >
+  <span class="value text-gray-600">{{ detail?.value ?? "________" }}</span>
+</div>
+
+<ng-template #loader>
+  <shimmer-loading [loadingsCount]="1"></shimmer-loading>
+</ng-template>

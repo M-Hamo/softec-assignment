@@ -30,11 +30,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private _routerObserver = (): void => {
     this._router.events
       .pipe(
-        tap((event) => {
-          if (event instanceof NavigationEnd) {
-            window.scrollTo(0, 0);
-            this._splashScreen.hide();
-          }
+        filter((event) => event instanceof NavigationEnd),
+        tap(() => {
+          window.scrollTo(0, 0);
+          this._splashScreen.hide();
         }),
         //Close subscription when component destroy
         takeUntil(this._destroyAll$)

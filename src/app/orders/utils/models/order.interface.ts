@@ -6,12 +6,7 @@ export interface IOrderVm {
   OrderId: number;
   PaymentType: string;
   UserId: string;
-  Products: (IOrderProduct | IProduct)[];
+  Products: IProduct[];
   TotalPrice?: number | undefined;
   User?: IUserVm | undefined;
-}
-
-export interface IOrderProduct {
-  ProductId: number;
-  Quantity: number;
 }

@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { concatMap, filter, map, take, tap } from "rxjs/operators";
 import { ProductsService } from "src/app/products/services/products.service";
-import { IOrderProduct, IOrderVm } from "../utils/models/order.interface";
+import { IOrderVm } from "../utils/models/order.interface";
 import { IUserVm } from "../utils/models/user.interface";
 import { IProduct } from "./../../products/utils/models/product.interface";
 
@@ -32,6 +32,32 @@ export class OrdersService {
     this._ordersStore.asObservable();
 
   /**
+   * Filter Orders with search store => filterOrders
+   */
+  public getFilteredOrders$: Observable<IOrderVm[]> = combineLatest([
+    this._filterOrders$,
+    this.ordersStore$,
+  ]).pipe(
+    map(([filterWard, allOrders]) =>
+      filterWard === null
+        ? allOrders
+        : allOrders.filter((prod: IOrderVm) =>
+            prod.OrderId.toString()?.includes(filterWard.toString())
+          )
+    )
+  );
+
+  /**
+   *
+   * @param Order of type IOrderVm
+   * Adding new order to orders store
+   */
+  public createOrder = (newOrder: IOrderVm): void => {
+    if (newOrder)
+      this._ordersStore.next([newOrder, ...this._ordersStore.value]);
+  };
+
+  /**
    *
    * @param orderId
    * @returns  Get the specific order by order id
@@ -55,22 +81,6 @@ export class OrdersService {
       )
     );
   };
-
-  /**
-   * Filter Orders with search store => filterOrders
-   */
-  public getFilteredOrders$: Observable<IOrderVm[]> = combineLatest([
-    this._filterOrders$,
-    this.ordersStore$,
-  ]).pipe(
-    map(([filterWard, allOrders]) =>
-      filterWard === null
-        ? allOrders
-        : allOrders.filter((prod: IOrderVm) =>
-            prod.OrderId.toString()?.includes(filterWard.toString())
-          )
-    )
-  );
 
   /**
    *
@@ -124,12 +134,12 @@ export class OrdersService {
     products: IProduct[]
   ): void => {
     const newList: IOrderVm[] = orders.map((order: IOrderVm) => {
-      const prods: (IProduct & IOrderProduct)[] = [];
+      const prods: IProduct[] = [];
 
-      order?.Products.forEach((o: IOrderProduct | IProduct) => {
+      order?.Products.forEach((o: IProduct) => {
         products.forEach((p: IProduct) => {
           if (o?.ProductId === p?.ProductId) {
-            prods.push({ ...o, ...p } as IProduct & IOrderProduct);
+            prods.push({ ...o, ...p } as IProduct);
           }
         });
       });
@@ -144,7 +154,11 @@ export class OrdersService {
     this._ordersStore.next(newList);
   };
 
-  // Calculate Total price for every order
+  /**
+   *
+   * @param prods Products array
+   * @returns Calculate total price for all products are given
+   */
   private _calculateTotalPrice = (prods: IProduct[]): number =>
     prods.reduce(
       (prevValue: number, current: IProduct) =>

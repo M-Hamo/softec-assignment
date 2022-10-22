@@ -48,8 +48,8 @@ export class ProductsService {
 
   // This func responsible for updating the edited product in the storing products
   public updateProduct = (product: IProduct): void => {
-    const newList: IProduct[] = this._productsStore.value;
-    const prodIndex: number = this._productsStore.value.findIndex(
+    const newList: IProduct[] = [...this._productsStore.value];
+    const prodIndex: number = this._productsStore.value?.findIndex(
       (prod: IProduct) => prod?.ProductId === product?.ProductId
     );
     newList.splice(prodIndex, 1, { ...product });
@@ -64,6 +64,7 @@ export class ProductsService {
       this._productsStore.value?.map((prod: IProduct) => ({
         ...prod,
         selected: false,
+        Quantity: 1,
       }))
     );
   };

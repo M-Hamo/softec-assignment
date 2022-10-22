@@ -8,12 +8,15 @@ import {
 import { MatDialogRef } from "@angular/material/dialog";
 import { ICreateOrderFormGroup } from "../../utils/models/create-order-form-group.interface";
 import { Observable, ReplaySubject } from "rxjs";
-import { debounceTime, switchMap, takeUntil, tap } from "rxjs/operators";
+import { debounceTime, takeUntil, tap } from "rxjs/operators";
 import { OrdersService } from "../../services/orders.service";
 import { IUserVm } from "../../utils/models/user.interface";
 import { ButtonColors, ButtonTypes } from "@shared/utils/button-properties";
 import { IProduct } from "src/app/products/utils/models/product.interface";
 import { ProductsService } from "src/app/products/services/products.service";
+import { IOrderVm } from "../../utils/models/order.interface";
+import { ToastrService } from "ngx-toastr";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-create-order",
@@ -23,6 +26,8 @@ import { ProductsService } from "src/app/products/services/products.service";
 export class CreateOrderComponent implements OnInit {
   public constructor(
     private readonly _fb: FormBuilder,
+    private readonly _router: Router,
+    private readonly _toasterService: ToastrService,
     public readonly _dialogRef: MatDialogRef<CreateOrderComponent>,
     private readonly _ordersService: OrdersService,
     private readonly _productsService: ProductsService
@@ -31,7 +36,9 @@ export class CreateOrderComponent implements OnInit {
   private readonly _destroyAll$ = new ReplaySubject<unknown>(1);
 
   public readonly selectedProducts$: Observable<IProduct[]> =
-    this._productsService.selectedProducts$.pipe(tap(console.log));
+    this._productsService.selectedProducts$.pipe(
+      tap((products: IProduct[]) => this._calculateOrderTotalPrice(products))
+    );
 
   public createOrderForm: FormGroup<ICreateOrderFormGroup> = this._fb.group({
     orderDate: new FormControl<string | null>(new Date().toISOString()),
@@ -52,6 +59,10 @@ export class CreateOrderComponent implements OnInit {
 
   public usersList: IUserVm[] = [];
 
+  private _selectedProductForCreateOrder: IProduct[] = [];
+
+  public orderTotalPrice: number = 0;
+
   public submitLoading: boolean = false;
 
   private _searchInputChange: boolean = false;
@@ -62,10 +73,18 @@ export class CreateOrderComponent implements OnInit {
 
   public onSubmitUpdate = (): void => {
     this.submitLoading = true;
-    setTimeout(() => {
-      this.cancelHandler({});
-      this.submitLoading = false;
-    }, 1000);
+    const { orderDate, paymentType, userId } = this.createOrderForm.value;
+
+    const payload: IOrderVm = {
+      OrderId: Math.floor(1000 + Math.random() * 9000),
+      OrderDate: orderDate as string,
+      PaymentType: paymentType as string,
+      UserId: userId as string,
+      Products: this._selectedProductForCreateOrder,
+      TotalPrice: this.orderTotalPrice,
+    };
+
+    this._createOrderHandler(payload);
   };
 
   private _searchUserHChangeHandler = (): void => {
@@ -94,6 +113,33 @@ export class CreateOrderComponent implements OnInit {
       .subscribe();
   };
 
+  /**
+   *
+   * @param products Selected products
+   *  Calculate total price for order based on product quantity an prise
+   */
+  private _calculateOrderTotalPrice = (products: IProduct[]): void => {
+    this._selectedProductForCreateOrder = [...products];
+    setTimeout(() => {
+      this.orderTotalPrice = products.reduce(
+        (prevValue: number, current: IProduct) =>
+          (current.Quantity as number) * current.ProductPrice + prevValue,
+        0
+      );
+    });
+  };
+
+  // Separating this function for clean
+  private _createOrderHandler = (order: IOrderVm): void => {
+    setTimeout(() => {
+      this._ordersService.createOrder(order);
+      this._toasterService.success("Order created successfully.");
+      this._router.navigateByUrl(`/shop/orders/${order.OrderId}`);
+      this._productsService.resetSelectedProducts();
+      this.submitLoading = false;
+      this.cancelHandler();
+    }, 1000);
+  };
   // Close modal
   public cancelHandler = (res?: unknown): void => {
     this._dialogRef.close(res ?? null);

@@ -1,0 +1,38 @@
+<div *ngIf="!!product; else loader" class="order-product-details flex-between">
+  <div class="flex-between gap-2">
+    <img [src]="product?.ProductImg" [alt]="product?.ProductName" />
+
+    <h4 class="text-start text-sm font-semibold text-gray-700">
+      {{ product?.ProductName }}
+    </h4>
+  </div>
+
+  <div class="flex flex-wrap justify-center items-center sm:gap-4 gap-1">
+    <div class="flex justify-center items-center sm:gap-3 gap-1">
+      <app-button
+        [disabled]="quantity >= product.AvailablePieces"
+        [matType]="ButtonTypes.raised"
+        [color]="ButtonColors.primary"
+        icon="add"
+        (clicked)="onIncreaseQuantity()"
+      ></app-button>
+
+      <app-button
+        [matType]="ButtonTypes.raised"
+        [color]="ButtonColors.warn"
+        icon="remove"
+        (clicked)="onDecreaseQuantity()"
+      ></app-button>
+    </div>
+
+    <div class="flex-center pr-4">
+      {{ product?.ProductPrice | currency }}
+      x
+      {{ quantity }}
+    </div>
+  </div>
+</div>
+
+<ng-template #loader>
+  <shimmer-loading [loadingsCount]="2"></shimmer-loading>
+</ng-template>

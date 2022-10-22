@@ -79,31 +79,30 @@
           Payment type required
         </mat-error>
       </mat-form-field>
+
+      <div
+        *ngIf="orderTotalPrice"
+        class="flex justify-center items-center text-lg font-bold"
+      >
+        Total Price
+        {{ " : " + (orderTotalPrice | currency) }}
+      </div>
     </div>
 
     <div class="flex-col-stretch gap-1">
-      <ng-container *ngIf="selectedProducts$ | async as selectedProducts">
+      <ng-container
+        *ngIf="selectedProducts$ | async as selectedProducts; else loader"
+      >
         <ng-container *ngIf="selectedProducts.length">
-          <div
-            *ngFor="let prod of selectedProducts"
-            class="order-product-details flex-between"
-          >
-            <div class="flex-between gap-2">
-              <img [src]="prod?.ProductImg" [alt]="prod?.ProductName" />
-
-              <h4 class="text-start text-sm font-semibold text-gray-700">
-                {{ prod?.ProductName }}
-              </h4>
-            </div>
-
-            <div class="flex-center pr-4">
-              {{ prod?.ProductPrice | currency }}
-              x
-              {{ prod?.Quantity }}
-            </div>
-          </div>
+          <ng-container *ngFor="let prod of selectedProducts">
+            <create-order-product [product]="prod"></create-order-product>
+          </ng-container>
         </ng-container>
       </ng-container>
     </div>
   </form>
 </app-dialog>
+
+<ng-template #loader>
+  <shimmer-loading [loadingsCount]="6"></shimmer-loading>
+</ng-template>

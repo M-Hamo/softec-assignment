@@ -30,6 +30,7 @@ import {
   TooltipPositions,
 } from "@shared/utils/button-properties";
 import { CreateOrderComponent } from "src/app/orders/components/create-order/create-order.component";
+import { IOrderVm } from "src/app/orders/utils/models/order.interface";
 
 @Component({
   selector: "app-product-list",
@@ -77,7 +78,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   public onCreateOrder = (): void => {
-    const dialogRef = this._dialog.open(CreateOrderComponent, {
+    this._dialog.open(CreateOrderComponent, {
       width:
         this.screenSize === Breakpoints.Small ||
         this.screenSize === Breakpoints.XSmall
@@ -89,15 +90,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
       closeOnNavigation: true,
       restoreFocus: false,
     });
-
-    dialogRef
-      .afterClosed()
-      .pipe(
-        take(1),
-        filter((res: IProduct) => !!res)
-        // concatMap((newProd: IProduct) => this._showQuantityMessage(newProd))
-      )
-      .subscribe();
   };
 
   // Handel select product
@@ -106,6 +98,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this._productsService.updateProduct({
         ...product,
         selected: !product?.selected,
+        Quantity: 1,
       });
     } else
       this._toasterService.error(

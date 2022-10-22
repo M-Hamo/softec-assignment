@@ -13,8 +13,9 @@
     class="table-scrollable"
     [data]="ordersList$ | async"
     [dataLoaded]="ordersLoaded"
-    [extendable]="true"
     [colSpanCount]="5"
+    [extendable]="true"
+    (onRowClicked)="onNavigateToDetails($event)"
   >
     <ng-template #headers>
       <th>Order_Id</th>
@@ -35,11 +36,11 @@
       <td (click)="$event.stopPropagation()">
         <div class="action-btns">
           <app-button
-            [routerLink]="['/shop/orders', row.OrderId]"
             btnClass="bg-gray-600 text-white"
             [matType]="ButtonTypes.miniFap"
             icon="airplay"
             toolTip="Details"
+            (clicked)="onNavigateToDetails(row)"
           >
           </app-button>
         </div>
@@ -56,12 +57,5 @@
       >
       </no-data>
     </ng-template>
-
-    <!-- <ng-template #extendableArea let-row>
-          <div class="min-h-min flex justify-center items-center bg-slate-50">
-            {{ index }}
-            {{ row | json }}
-          </div>
-        </ng-template> -->
   </app-table>
 </section>

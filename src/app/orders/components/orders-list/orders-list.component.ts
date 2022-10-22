@@ -9,6 +9,7 @@ import {
   finalize,
   map,
   switchMap,
+  take,
   takeUntil,
   tap,
   throttleTime,
@@ -52,6 +53,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this._paramsChangeObserver();
     this._searchInputChangeObserver();
   }
+
+  public onNavigateToDetails = (order: IOrderVm): void => {
+    from(this._router.navigateByUrl(`/shop/orders/${order.OrderId}`))
+      .pipe(take(1))
+      .subscribe();
+  };
 
   // This func watch the params changes
   private _paramsChangeObserver = (): void => {

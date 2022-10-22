@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute, Params } from "@angular/router";
 import { OrdersService } from "../../services/orders.service";
 import { Observable } from "rxjs";
@@ -10,7 +10,7 @@ import { IOrderVm } from "./../../utils/models/order.interface";
   templateUrl: "./order-details.component.html",
   styleUrls: ["./order-details.component.scss"],
 })
-export class OrderDetailsComponent implements OnInit {
+export class OrderDetailsComponent {
   public constructor(
     private readonly _route: ActivatedRoute,
     private readonly _ordersService: OrdersService
@@ -21,8 +21,4 @@ export class OrderDetailsComponent implements OnInit {
       this._ordersService.getOrderById(+params["id"])
     )
   );
-
-  public ngOnInit(): void {
-    this.orderDetails$.subscribe(console.log);
-  }
 }

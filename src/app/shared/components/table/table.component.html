@@ -28,7 +28,7 @@
                 'hover:cursor-pointer hover:bg-slate-50': extendable,
                 'hover:cursor-default': !extendable
               }"
-              (click)="extendable && onExpandRow(rowIndex)"
+              (click)="extendable && onExpandRow(rowIndex, row)"
             >
               <ng-container
                 *ngTemplateOutlet="

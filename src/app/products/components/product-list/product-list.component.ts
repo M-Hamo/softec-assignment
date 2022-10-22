@@ -17,10 +17,20 @@ import { ParamsHelper } from "@shared/helpers/param-helper";
 import { MatDialog } from "@angular/material/dialog";
 import { BreakpointObserverService } from "@shared/services/breakpoint-observer.service";
 import { Breakpoints } from "@angular/cdk/layout";
-import { ModalPercentageSize } from "@shared/utils/enum/modal-size-enum";
+import {
+  ModalHeight,
+  ModalPercentageSize,
+} from "@shared/utils/enum/modal-size-enum";
 import { ToastrService } from "ngx-toastr";
 import { EditProductQuantityComponent } from "../../ui/edit-product-quantity/edit-product-quantity.component";
 import { ConfirmationDialogService } from "@shared/components/confirmation-dialog";
+import {
+  ButtonColors,
+  ButtonTypes,
+  TooltipPositions,
+} from "@shared/utils/button-properties";
+import { CreateOrderComponent } from "src/app/orders/components/create-order/create-order.component";
+import { IOrderVm } from "src/app/orders/utils/models/order.interface";
 
 @Component({
   selector: "app-product-list",
@@ -51,6 +61,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   public searchInput: FormControl<string | null> = this._fb.control(null);
 
+  public readonly ButtonTypes = ButtonTypes;
+  public readonly ButtonColors = ButtonColors;
+  public readonly TooltipPositions = TooltipPositions;
+
   private readonly QUERY = {
     SEARCH: "search",
   };
@@ -63,16 +77,49 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this._searchInputChangeObserver();
   }
 
+  public onCreateOrder = (): void => {
+    this._dialog.open(CreateOrderComponent, {
+      width:
+        this.screenSize === Breakpoints.Small ||
+        this.screenSize === Breakpoints.XSmall
+          ? ModalPercentageSize.FULL
+          : ModalPercentageSize.LARGE,
+      height: ModalHeight.LARGE,
+      hasBackdrop: true,
+      disableClose: true,
+      closeOnNavigation: true,
+      restoreFocus: false,
+    });
+  };
+
+  // Handel select product
   public onSelectProduct = (product: IProduct): void => {
     if (product?.AvailablePieces > 5) {
       this._productsService.updateProduct({
         ...product,
         selected: !product?.selected,
+        Quantity: 1,
       });
     } else
       this._toasterService.error(
         "This product has very few quantity, Yous should update it and try to select again."
       );
+  };
+
+  public resetSelectedProducts = (): void => {
+    this._confirmService
+      .Confirm(
+        `Are you sure to Unselect all selected products ?`,
+        "Are you sure ?",
+        "Reset",
+        "cancel"
+      )
+      .pipe(
+        take(1),
+        filter((res: boolean) => res),
+        tap(() => this._productsService.resetSelectedProducts())
+      )
+      .subscribe();
   };
 
   // Edit Product quantity
@@ -95,26 +142,28 @@ export class ProductListComponent implements OnInit, OnDestroy {
       .pipe(
         take(1),
         filter((res: IProduct) => !!res),
-        concatMap((newProd: IProduct) =>
-          this._confirmService
-            .Confirm(
-              `Are you sure to change ${newProd.ProductName} quantity `,
-              "Are you sure ?",
-              "Update",
-              "cancel"
-            )
-            .pipe(
-              tap((res: boolean) => {
-                if (res) {
-                  this._productsService.updateProduct(newProd);
-                  this._toasterService.success("Product updated successfully.");
-                }
-              })
-            )
-        )
+        concatMap((newProd: IProduct) => this._showQuantityMessage(newProd))
       )
       .subscribe();
   };
+
+  // Handle change quantity message
+  private _showQuantityMessage = (newProd: IProduct): Observable<unknown> =>
+    this._confirmService
+      .Confirm(
+        `Are you sure to change ${newProd.ProductName} quantity `,
+        "Are you sure ?",
+        "Update",
+        "cancel"
+      )
+      .pipe(
+        tap((res: boolean) => {
+          if (res) {
+            this._productsService.updateProduct(newProd);
+            this._toasterService.success("Product updated successfully.");
+          }
+        })
+      );
 
   // This func watch the params changes
   private _paramsChangeObserver = (): void => {

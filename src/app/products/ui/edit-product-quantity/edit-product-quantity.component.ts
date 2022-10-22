@@ -36,7 +36,7 @@ export class EditProductQuantityComponent implements OnInit {
     this.submitLoading = true;
     setTimeout(() => {
       this.quantityField.valid &&
-        this._dialogRef.close({
+        this.cancelHandler({
           ...this.data.product,
           AvailablePieces: this.quantityField?.value,
         } as IProduct);

@@ -48,12 +48,25 @@ export class ProductsService {
 
   // This func responsible for updating the edited product in the storing products
   public updateProduct = (product: IProduct): void => {
-    const newList: IProduct[] = this._productsStore.value;
-    const prodIndex: number = this._productsStore.value.findIndex(
+    const newList: IProduct[] = [...this._productsStore.value];
+    const prodIndex: number = this._productsStore.value?.findIndex(
       (prod: IProduct) => prod?.ProductId === product?.ProductId
     );
     newList.splice(prodIndex, 1, { ...product });
     this._productsStore.next(newList);
+  };
+
+  /**
+   * Reset all selected products states to unselected (Default)
+   */
+  public resetSelectedProducts = (): void => {
+    this._productsStore.next(
+      this._productsStore.value?.map((prod: IProduct) => ({
+        ...prod,
+        selected: false,
+        Quantity: 1,
+      }))
+    );
   };
 
   // This func responsible for storing products to make changes with data

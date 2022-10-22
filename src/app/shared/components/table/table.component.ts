@@ -2,8 +2,10 @@ import { CommonModule } from "@angular/common";
 import {
   Component,
   ContentChild,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   TemplateRef,
 } from "@angular/core";
 import { ShimmerLoadingComponent } from "../shimmer-loading/shimmer-loading.component";
@@ -16,8 +18,6 @@ import { ShimmerLoadingComponent } from "../shimmer-loading/shimmer-loading.comp
   styleUrls: ["./table.component.scss"],
 })
 export class TableComponent implements OnInit {
-  public constructor() {}
-
   @Input() public readonly data!: any[];
 
   @Input() public readonly colSpanCount?: number;
@@ -31,6 +31,8 @@ export class TableComponent implements OnInit {
   @Input() public readonly extendable?: boolean = false;
 
   @Input() public readonly extendableByDefault?: boolean;
+
+  @Output() public readonly onRowClicked = new EventEmitter<any>();
 
   @ContentChild("headers") public readonly headers:
     | TemplateRef<any>
@@ -60,7 +62,9 @@ export class TableComponent implements OnInit {
 
   public ngOnInit(): void {}
 
-  public onExpandRow = (rowIndex: number): void => {
+  public onExpandRow = (rowIndex: number, rowData?: any): void => {
+    this.onRowClicked.emit(rowData);
+
     const index: number = this._expandedRows.findIndex(
       (i: number) => i === rowIndex
     );

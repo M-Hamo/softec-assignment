@@ -19,6 +19,11 @@ A web application to show Products, Orders and Customers using data seed from js
 Project is created with:
 
 - Angular 14
+
+-- Standalone Components
+-- Strong Typed Forms
+-- Streamlined Page Title accessibility
+
 - Typescript
 - RxJS
 - HTML
@@ -27,11 +32,6 @@ Project is created with:
 - ngx-progressbar
 - ngx-toastr
 
-## Why we use angular 14
-
-- Standalone Components
-- Strong Typed Forms
-- Streamlined Page Title accessibility
 
 ## Setup
 

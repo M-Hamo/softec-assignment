@@ -16,7 +16,7 @@
         *ngIf="selectedProducts.length === 0"
         class="lg:col-span-4 md:col-span-3 sm:col-span-2 col-span-1 bg-slate-100 rounded p-2"
       >
-        Selected product with show here.
+        Selected products will show here.
         <sub>(Click on the product to select)</sub>
       </h6>
       <ng-container *ngIf="selectedProducts.length">
@@ -61,21 +61,23 @@
     </ng-container>
 
     <ng-container *ngIf="products$ | async as products; else loader">
-      <app-product
-        *ngFor="let prod of products"
-        [matTooltip]="
-          prod?.selected
-            ? 'Unselect'
-            : prod?.AvailablePieces <= 5
-            ? 'Edit quantity before select'
-            : 'Select product'
-        "
-        [matTooltipPosition]="TooltipPositions.ABOVE"
-        [product]="prod"
-        [productSelected]="prod?.selected"
-        (onEditProduct)="onEditProductQuantity($event)"
-        (click)="onSelectProduct(prod)"
-      ></app-product>
+      <ng-container *ngIf="products.length > 0; else noData">
+        <app-product
+          *ngFor="let prod of products"
+          [matTooltip]="
+            prod?.selected
+              ? 'Unselect'
+              : prod?.AvailablePieces <= 5
+              ? 'Edit quantity before select'
+              : 'Select product'
+          "
+          [matTooltipPosition]="TooltipPositions.ABOVE"
+          [product]="prod"
+          [productSelected]="prod?.selected"
+          (onEditProduct)="onEditProductQuantity($event)"
+          (click)="onSelectProduct(prod)"
+        ></app-product>
+      </ng-container>
     </ng-container>
   </div>
 </section>
@@ -84,4 +86,17 @@
   <mat-card class="m-0 p-0" *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]">
     <shimmer-loading [loadingsCount]="4"></shimmer-loading>
   </mat-card>
+</ng-template>
+
+<ng-template #noData>
+  <section class="lg:col-span-4 md:col-span-3 sm:col-span-2 col-span-1">
+    <no-data
+      [text]="
+        searchInput.value
+          ? 'No products matches this search input !!'
+          : 'There is no products to show !!'
+      "
+    >
+    </no-data>
+  </section>
 </ng-template>

@@ -3,7 +3,7 @@ import { FormBuilder, FormControl } from "@angular/forms";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { ParamsHelper } from "@shared/helpers/param-helper";
 import { ButtonTypes } from "@shared/utils/button-properties";
-import { from, Observable, ReplaySubject } from "rxjs";
+import { from, Observable, Subject } from "rxjs";
 import {
   debounceTime,
   finalize,
@@ -30,9 +30,9 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     private readonly _orderService: OrdersService
   ) {}
 
-  // This ReplaySubject with fire in Destroy Component state
+  // This Subject with fire in Destroy Component state
   // So use it to close all opened subscribers with takeUntil method
-  private readonly _destroyAll$ = new ReplaySubject<unknown>(1);
+  private readonly _destroyAll$ = new Subject<unknown>();
 
   public searchInput: FormControl<number | null> = this._fb.control(null);
 

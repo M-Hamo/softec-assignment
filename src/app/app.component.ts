@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatIconRegistry } from "@angular/material/icon";
 import { NavigationEnd, Router } from "@angular/router";
 import { AppSplashScreenService } from "@shared/services/splash-screen.service";
-import { ReplaySubject } from "rxjs";
+import { Subject } from "rxjs";
 import { filter, takeUntil, tap } from "rxjs/operators";
 
 @Component({
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this._iconRegistry.setDefaultFontSetClass("material-icons-round");
   }
 
-  private readonly _destroyAll$ = new ReplaySubject<unknown>(1);
+  private readonly _destroyAll$ = new Subject<unknown>();
 
   public ngOnInit(): void {
     this._routerObserver();

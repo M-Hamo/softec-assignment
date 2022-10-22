@@ -19,7 +19,7 @@ import {
   ReactiveFormsModule,
   ValidationErrors,
 } from "@angular/forms";
-import { ReplaySubject, takeUntil } from "rxjs";
+import { Subject, takeUntil } from "rxjs";
 
 @Component({
   standalone: true,
@@ -44,8 +44,7 @@ import { ReplaySubject, takeUntil } from "rxjs";
 export class MagicSearchInputComponent implements OnDestroy {
   public constructor(private readonly _fb: FormBuilder) {}
 
-  private readonly _destroyAll$: ReplaySubject<unknown> =
-    new ReplaySubject<unknown>(1);
+  private readonly _destroyAll$: Subject<unknown> = new Subject<unknown>();
 
   @ViewChild("input") public input!: ElementRef<HTMLInputElement>;
 

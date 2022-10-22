@@ -6,7 +6,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from "@angular/core";
-import { ReplaySubject } from "rxjs";
+import { Subject } from "rxjs";
 import { takeUntil, tap } from "rxjs/operators";
 import { BreakpointObserverService } from "../services/breakpoint-observer.service";
 
@@ -28,8 +28,7 @@ export class SmallScreenDirectorDirective implements OnInit {
 
   @Input("smallScreenElse") public placeholder: TemplateRef<any> | null = null;
 
-  private readonly _destroyAll$: ReplaySubject<unknown> =
-    new ReplaySubject<unknown>(1);
+  private readonly _destroyAll$: Subject<unknown> = new Subject<unknown>();
 
   public readonly Breakpoints = Breakpoints;
 

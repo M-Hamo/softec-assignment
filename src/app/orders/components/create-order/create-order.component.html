@@ -1,5 +1,5 @@
 <app-dialog
-  [isValid]="createOrderForm?.valid"
+  [isValid]="createOrderForm?.valid && selectedProductForCreateOrder.length"
   [isLoading]="submitLoading"
   submitBtnText="Save"
   title="Create Order"

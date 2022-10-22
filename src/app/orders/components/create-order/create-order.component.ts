@@ -59,7 +59,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   public usersList: IUserVm[] = [];
 
-  private _selectedProductForCreateOrder: IProduct[] = [];
+  public selectedProductForCreateOrder: IProduct[] = [];
 
   public orderTotalPrice: number = 0;
 
@@ -80,7 +80,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       OrderDate: orderDate as string,
       PaymentType: paymentType as string,
       UserId: userId as string,
-      Products: this._selectedProductForCreateOrder,
+      Products: this.selectedProductForCreateOrder,
       TotalPrice: this.orderTotalPrice,
     };
 
@@ -119,7 +119,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
    *  Calculate total price for order based on product quantity an prise
    */
   private _calculateOrderTotalPrice = (products: IProduct[]): void => {
-    this._selectedProductForCreateOrder = [...products];
+    this.selectedProductForCreateOrder = [...products];
     setTimeout(() => {
       this.orderTotalPrice = products.reduce(
         (prevValue: number, current: IProduct) =>

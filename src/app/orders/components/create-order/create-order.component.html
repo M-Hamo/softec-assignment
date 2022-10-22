@@ -1,0 +1,109 @@
+<app-dialog
+  [isValid]="createOrderForm?.valid"
+  [isLoading]="submitLoading"
+  submitBtnText="Save"
+  title="Create Order"
+  titleIcon="shopping_cart"
+  cancelBtnText="cancel"
+  (submitDialog)="onSubmitUpdate()"
+  (closeDialog)="cancelHandler()"
+  (cancelDialog)="cancelHandler()"
+>
+  <form [formGroup]="createOrderForm" class="flex-col-stretch">
+    <div class="grid sm:grid-cols-3 grid-cols-1 gap-2">
+      <mat-form-field appearance="outline">
+        <mat-label>User</mat-label>
+        <mat-select disableOptionCentering formControlName="userId">
+          <div
+            class="flex justify-center items-center"
+            style="border-bottom: 2px solid whitesmoke"
+          >
+            <input
+              class="flex-grow outline-none"
+              placeholder="Search with name..."
+              style="height: 50px; text-indent: 10px"
+              [formControl]="userSearchInput"
+            />
+
+            <app-button
+              *ngIf="userSearchInput?.value?.length"
+              [matType]="ButtonTypes.icon"
+              [color]="ButtonColors.warn"
+              icon="clear"
+              (clicked)="userSearchInput.reset()"
+            ></app-button>
+          </div>
+
+          <ng-container *ngIf="usersList?.length; else noData">
+            <mat-option [value]="null">Reset</mat-option>
+            <mat-option
+              *ngFor="let user of usersList"
+              [value]="user?.Id"
+              class="text-center"
+              >{{ user?.Name }}</mat-option
+            >
+          </ng-container>
+
+          <ng-template #noData>
+            <div
+              class="flex justify-center items-center p-2 text-base font-medium"
+            >
+              There on results match you search
+            </div></ng-template
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="
+            createOrderForm?.get('userId')?.touched &&
+            createOrderForm?.get('userId')?.invalid
+          "
+        >
+          User is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Payment type</mat-label>
+        <mat-select disableOptionCentering formControlName="paymentType">
+          <mat-option *ngFor="let type of ['Online', 'Cash']" [value]="type">
+            {{ type }}
+          </mat-option>
+        </mat-select>
+
+        <mat-error
+          *ngIf="
+            createOrderForm.get('paymentType')?.touched &&
+            createOrderForm.get('paymentType')?.errors
+          "
+        >
+          Payment type required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="flex-col-stretch gap-1">
+      <ng-container *ngIf="selectedProducts$ | async as selectedProducts">
+        <ng-container *ngIf="selectedProducts.length">
+          <div
+            *ngFor="let prod of selectedProducts"
+            class="order-product-details flex-between"
+          >
+            <div class="flex-between gap-2">
+              <img [src]="prod?.ProductImg" [alt]="prod?.ProductName" />
+
+              <h4 class="text-start text-sm font-semibold text-gray-700">
+                {{ prod?.ProductName }}
+              </h4>
+            </div>
+
+            <div class="flex-center pr-4">
+              {{ prod?.ProductPrice | currency }}
+              x
+              {{ prod?.Quantity }}
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </form>
+</app-dialog>

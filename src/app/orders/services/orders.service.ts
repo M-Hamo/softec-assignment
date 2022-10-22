@@ -31,7 +31,11 @@ export class OrdersService {
   public readonly ordersStore$: Observable<IOrderVm[]> =
     this._ordersStore.asObservable();
 
-  // Get the specific order by order id
+  /**
+   *
+   * @param orderId
+   * @returns  Get the specific order by order id
+   */
   public getOrderById = (orderId: number): Observable<IOrderVm> => {
     return this.ordersStore$.pipe(
       map(
@@ -52,7 +56,9 @@ export class OrdersService {
     );
   };
 
-  // Filter Orders with search store => filterOrders
+  /**
+   * Filter Orders with search store => filterOrders
+   */
   public getFilteredOrders$: Observable<IOrderVm[]> = combineLatest([
     this._filterOrders$,
     this.ordersStore$,
@@ -65,6 +71,38 @@ export class OrdersService {
           )
     )
   );
+
+  /**
+   *
+   * @param payload
+   * @returns  Observable<IUserVm> If we pass an Id
+   * @returns  Observable<IUserVm[]> If we search for users by name
+   */
+  public getSearchedUser = (
+    userId?: string | undefined,
+    searchKey: string | null = null
+  ): Observable<IUserVm | IUserVm[]> => {
+    return this._getUsers$.pipe(
+      map((users: IUserVm[]) => {
+        if (userId) {
+          return (
+            users.find((user: IUserVm) => user?.Id === userId) ||
+            ({} as IUserVm)
+          );
+        } else if (searchKey || searchKey === null) {
+          return searchKey === null
+            ? users
+            : users.filter((user: IUserVm) =>
+                user?.Name.toLowerCase().includes(
+                  (searchKey as string)?.toLowerCase()
+                )
+              );
+        }
+
+        return [] as IUserVm[];
+      })
+    );
+  };
 
   // This func responsible for storing Orders to make changes with data
   // Take(1) => Store it once i Inject the service

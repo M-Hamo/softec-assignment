@@ -12,25 +12,65 @@
     class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 content-start gap-4"
   >
     <ng-container *ngIf="selectedProducts$ | async as selectedProducts">
-      <mat-chip-list
-        *ngIf="selectedProducts.length"
+      <h6
+        *ngIf="selectedProducts.length === 0"
         class="lg:col-span-4 md:col-span-3 sm:col-span-2 col-span-1 bg-slate-100 rounded p-2"
       >
-        <mat-chip
-          *ngFor="let prod of selectedProducts"
-          (removed)="onSelectProduct(prod)"
+        Selected product with show here.
+        <sub>(Click on the product to select)</sub>
+      </h6>
+      <ng-container *ngIf="selectedProducts.length">
+        <mat-chip-list
+          class="lg:col-span-4 md:col-span-3 sm:col-span-2 col-span-1 bg-slate-100 rounded p-2"
         >
-          {{ prod?.ProductName }}
-          <button matChipRemove>
-            <mat-icon>cancel</mat-icon>
-          </button>
-        </mat-chip>
-      </mat-chip-list>
+          <mat-chip
+            *ngFor="let prod of selectedProducts"
+            (removed)="onSelectProduct(prod)"
+          >
+            {{ prod?.ProductName }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+        </mat-chip-list>
+
+        <div
+          class="lg:col-span-4 md:col-span-3 sm:col-span-2 col-span-1 flex-start"
+        >
+          <app-button
+            btnClass="bg-gray-600 outline-none text-white shadow-md"
+            [matType]="ButtonTypes.round_stroked"
+            [color]="ButtonColors.primary"
+            icon="shopping_cart_checkout"
+            text="Create order"
+            (clicked)="onCreateOrder()"
+          >
+          </app-button>
+
+          <app-button
+            class="mx-3"
+            [color]="ButtonColors.warn"
+            [matType]="ButtonTypes.miniFap"
+            icon="restart_alt"
+            toolTip="Reset selected state"
+            (clicked)="resetSelectedProducts()"
+          >
+          </app-button>
+        </div>
+      </ng-container>
     </ng-container>
 
     <ng-container *ngIf="products$ | async as products; else loader">
       <app-product
         *ngFor="let prod of products"
+        [matTooltip]="
+          prod?.selected
+            ? 'Unselect'
+            : prod?.AvailablePieces <= 5
+            ? 'Edit quantity before select'
+            : 'Select product'
+        "
+        [matTooltipPosition]="TooltipPositions.ABOVE"
         [product]="prod"
         [productSelected]="prod?.selected"
         (onEditProduct)="onEditProductQuantity($event)"

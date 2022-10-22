@@ -56,6 +56,18 @@ export class ProductsService {
     this._productsStore.next(newList);
   };
 
+  /**
+   * Reset all selected products states to unselected (Default)
+   */
+  public resetSelectedProducts = (): void => {
+    this._productsStore.next(
+      this._productsStore.value?.map((prod: IProduct) => ({
+        ...prod,
+        selected: false,
+      }))
+    );
+  };
+
   // This func responsible for storing products to make changes with data
   // Take(1) => Store it once i Inject the service
   private _storProducts = (): void => {

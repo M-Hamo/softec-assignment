@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { CreateOrderComponent } from "./components/create-order/create-order.component";
 import { OrderDetailsComponent } from "./components/order-details/order-details.component";
 import { OrdersListComponent } from "./components/orders-list/orders-list.component";
 import { OrderDetailComponent } from "./ui/order-detail/order-detail.component";
@@ -29,5 +30,6 @@ export class OrdersRoutingModule {
     OrdersListComponent,
     OrderDetailsComponent,
     OrderDetailComponent,
+    CreateOrderComponent,
   ];
 }

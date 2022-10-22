@@ -6,14 +6,18 @@
   titleIcon="shopping_cart"
   cancelBtnText="cancel"
   (submitDialog)="onSubmitUpdate()"
-  (closeDialog)="cancelHandler()"
-  (cancelDialog)="cancelHandler()"
+  (closeDialog)="closeHandler()"
+  (cancelDialog)="closeHandler()"
 >
   <form [formGroup]="createOrderForm" class="flex-col-stretch">
     <div class="grid sm:grid-cols-3 grid-cols-1 gap-2">
       <mat-form-field appearance="outline">
         <mat-label>User</mat-label>
-        <mat-select disableOptionCentering formControlName="userId">
+        <mat-select
+          disableOptionCentering
+          formControlName="userId"
+          (openedChange)="userSearchInput.reset()"
+        >
           <div
             class="flex justify-center items-center"
             style="border-bottom: 2px solid whitesmoke"

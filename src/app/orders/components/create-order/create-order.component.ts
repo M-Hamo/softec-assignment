@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -7,7 +7,7 @@ import {
 } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import { ICreateOrderFormGroup } from "../../utils/models/create-order-form-group.interface";
-import { Observable, ReplaySubject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { debounceTime, takeUntil, tap } from "rxjs/operators";
 import { OrdersService } from "../../services/orders.service";
 import { IUserVm } from "../../utils/models/user.interface";
@@ -23,7 +23,7 @@ import { Router } from "@angular/router";
   templateUrl: "./create-order.component.html",
   styleUrls: ["./create-order.component.scss"],
 })
-export class CreateOrderComponent implements OnInit {
+export class CreateOrderComponent implements OnInit, OnDestroy {
   public constructor(
     private readonly _fb: FormBuilder,
     private readonly _router: Router,
@@ -33,7 +33,7 @@ export class CreateOrderComponent implements OnInit {
     private readonly _productsService: ProductsService
   ) {}
 
-  private readonly _destroyAll$ = new ReplaySubject<unknown>(1);
+  private readonly _destroyAll$ = new Subject<unknown>();
 
   public readonly selectedProducts$: Observable<IProduct[]> =
     this._productsService.selectedProducts$.pipe(
@@ -137,13 +137,17 @@ export class CreateOrderComponent implements OnInit {
       this._router.navigateByUrl(`/shop/orders/${order.OrderId}`);
       this._productsService.resetSelectedProducts();
       this.submitLoading = false;
-      this.cancelHandler();
+      this.closeHandler();
     }, 1000);
   };
+
   // Close modal
-  public cancelHandler = (res?: unknown): void => {
+  public closeHandler = (res?: unknown): void => {
     this._dialogRef.close(res ?? null);
+  };
+
+  public ngOnDestroy(): void {
     this._destroyAll$.next(undefined);
     this._destroyAll$.complete();
-  };
+  }
 }

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormControl } from "@angular/forms";
-import { from, Observable, ReplaySubject } from "rxjs";
+import { from, Observable, Subject } from "rxjs";
 import { ProductsService } from "../../services/products.service";
 import { IProduct } from "../../utils/models/product.interface";
 import {
@@ -49,18 +49,20 @@ export class ProductListComponent implements OnInit, OnDestroy {
     private readonly _productsService: ProductsService
   ) {}
 
-  // This ReplaySubject with fire in Destroy Component state
+  // This Subject with fire in Destroy Component state
   // So use it to close all opened subscribers with takeUntil method
-  private readonly _destroyAll$ = new ReplaySubject<unknown>(1);
+  private readonly _destroyAll$ = new Subject<unknown>();
 
   public readonly products$: Observable<IProduct[]> =
     this._productsService.getFilteredProducts$;
 
+  // Only products we just selected
   public readonly selectedProducts$: Observable<IProduct[]> =
     this._productsService.selectedProducts$;
 
   public searchInput: FormControl<string | null> = this._fb.control(null);
 
+  // Button components configurations
   public readonly ButtonTypes = ButtonTypes;
   public readonly ButtonColors = ButtonColors;
   public readonly TooltipPositions = TooltipPositions;
@@ -102,7 +104,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       });
     } else
       this._toasterService.error(
-        "This product has very few quantity, Yous should update it and try to select again."
+        "This product has very few quantity, You should update it and try to select again."
       );
   };
 

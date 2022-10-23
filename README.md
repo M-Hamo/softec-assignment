@@ -19,9 +19,9 @@ A web application to show Products, Orders and Customers using data seed from js
 Project is created with:
 
 - Angular 14
-  - standalone Components
-  - strong Typed Forms
-  - streamlined Page Title accessibility
+  - Standalone Components
+  - Strong Typed Forms
+  - Streamlined Page Title accessibility
 - Typescript
 - RxJS
 - HTML

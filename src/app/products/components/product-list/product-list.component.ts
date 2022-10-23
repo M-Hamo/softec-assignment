@@ -20,6 +20,7 @@ import { Breakpoints } from "@angular/cdk/layout";
 import {
   ModalHeight,
   ModalPercentageSize,
+  ModalSize,
 } from "@shared/utils/enum/modal-size-enum";
 import { ToastrService } from "ngx-toastr";
 import { EditProductQuantityComponent } from "../../ui/edit-product-quantity/edit-product-quantity.component";
@@ -30,7 +31,6 @@ import {
   TooltipPositions,
 } from "@shared/utils/button-properties";
 import { CreateOrderComponent } from "src/app/orders/components/create-order/create-order.component";
-import { IOrderVm } from "src/app/orders/utils/models/order.interface";
 
 @Component({
   selector: "app-product-list",
@@ -79,13 +79,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this._searchInputChangeObserver();
   }
 
+  // Show create order modal
   public onCreateOrder = (): void => {
     this._dialog.open(CreateOrderComponent, {
       width:
         this.screenSize === Breakpoints.Small ||
         this.screenSize === Breakpoints.XSmall
-          ? ModalPercentageSize.FULL
-          : ModalPercentageSize.LARGE,
+          ? ModalSize.X_LARGE
+          : ModalSize.LARGE,
       height: ModalHeight.LARGE,
       hasBackdrop: true,
       disableClose: true,

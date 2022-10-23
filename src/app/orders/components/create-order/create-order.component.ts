@@ -135,7 +135,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       this._ordersService.createOrder(order);
       this._toasterService.success("Order created successfully.");
       this._router.navigateByUrl(`/shop/orders/${order.OrderId}`);
-      this._productsService.resetSelectedProducts();
       this.submitLoading = false;
       this.closeHandler();
     }, 1000);

@@ -8,3 +8,15 @@
     object-fit: contain;
   }
 }
+
+@media (max-width: 768px) {
+  .order-product-details {
+    .product-name {
+      display: none;
+    }
+
+    img {
+      max-height: 116px;
+    }
+  }
+}

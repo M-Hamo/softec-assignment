@@ -6,7 +6,6 @@
   padding: 2.25rem 0;
   margin: 0 auto;
 
-  // @apply grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1;
   @apply flex flex-wrap justify-between items-start;
 
   mat-card {
@@ -53,5 +52,9 @@
     padding: 1rem;
     gap: 4px;
     width: 100%;
+  }
+
+  .product-name {
+    display: none;
   }
 }

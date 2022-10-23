@@ -6,11 +6,9 @@ import { MaterialModule } from "./material.module";
 import { ButtonComponent } from "./components/button-action/button/button.component";
 import { ShimmerLoadingComponent } from "./components/shimmer-loading/shimmer-loading.component";
 import { TableComponent } from "./components/table/table.component";
-import { AutofocusDirective } from "./directives/autofocus.directive";
-import { BackButtonDirective } from "./directives/back-button.directive";
 import { NoDataComponent } from "./components/no-data/no-data.component";
 
-const DIRECTIVES = [BackButtonDirective, AutofocusDirective];
+const DIRECTIVES: any[] = [];
 
 const PIPES: any[] = [];
 

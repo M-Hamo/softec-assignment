@@ -51,10 +51,21 @@ export class OrdersService {
    *
    * @param Order of type IOrderVm
    * Adding new order to orders store
+   * Subtract the AvailablePieces from the quantity ordered for each product
    */
   public createOrder = (newOrder: IOrderVm): void => {
-    if (newOrder)
+    if (newOrder) {
+      newOrder.Products.forEach((prod: IProduct) => {
+        this._productsService.updateProduct({
+          ...prod,
+          AvailablePieces: prod.AvailablePieces - (prod.Quantity as number),
+          selected: false,
+          Quantity: 1,
+        });
+      });
+
       this._ordersStore.next([newOrder, ...this._ordersStore.value]);
+    }
   };
 
   /**

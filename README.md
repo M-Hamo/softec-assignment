@@ -39,4 +39,5 @@ To run this project, install it locally using npm:
 cd ./softic-assignment
 npm install
 npm start
+Open your browser on http://localhost:2500/
 ```

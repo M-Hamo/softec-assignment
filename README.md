@@ -39,5 +39,6 @@ cd ./softic-assignment
 npm install
 npm start
 Open your browser on http://localhost:2500/
-See live🚀 on https://m-hamo.github.io/softec-assignment
+[Live demo🚀](https://m-hamo.github.io/softec-assignment)
+
 ```
